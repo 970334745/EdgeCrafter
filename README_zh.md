@@ -38,6 +38,7 @@ Task-Specialized Distillation</h1>
 
 ## 🚀 更新日志
 
+- **[2026.10.22]** 修正了 FLOPs 的计算逻辑。此前由于 [calculate-flops](https://github.com/MrYxJ/calculate-flops.pytorch) 漏算了 Attention 部分的 FLOPs 导致结果不准，现已修复。
 - **[2026-08-20]** 感谢 Hugging Face 开源团队的 [@Apolinario](https://github.com/apolinario) 构建了 EdgeCrafter 的交互式 Hugging Face Spaces 演示。欢迎体验 [Demo](https://huggingface.co/spaces/Intellindust/edgecrafter-detection)
 - **[2026-08-14]** 我们发布了基于Objects365预训练的权重
 - **[2026-08-13]** EdgeCrafter 已集成到 [Intel® Geti™](https://github.com/open-edge-platform/geti)：无需编写代码即可在自有数据上微调 ECDet-S/M/L/X，支持在 Intel 独立显卡 / 集成显卡 / CPU 上训练，并导出为 OpenVINO™ IR 以及 INT8 优化模型用于边缘部署
@@ -75,14 +76,14 @@ Task-Specialized Distillation</h1>
 
 | Model | Extra Sup. | Size | AP<sub>50:95</sub> | #Params | GFLOPs | Latency (ms) | Config | Log | Checkpoint |
 |:-----:|:----------:|:----:|:------------------:|:-------:|:------:|:------------:|:------:|:---:|:----------:|
-| **ECDet-S** | -- | 640 | 51.7 | 10 | 26 | 5.41 | [config](ecdetseg/configs/ecdet/ecdet_s.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_s.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_s.pth) |
-| **ECDet-S** | O365 | 640 | 53.6 | 10 | 26 | 5.41 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_s_o3652coco.pth) |
-| **ECDet-M** | -- | 640 | 54.3 | 19 | 53 | 7.98 | [config](ecdetseg/configs/ecdet/ecdet_m.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_m.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_m.pth) |
-| **ECDet-M** | O365 | 640 | 56.7 | 19 | 53 | 7.98 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_m_o3652coco.pth) |
-| **ECDet-L** | -- | 640 | 57.0 | 33 | 101 | 10.49 | [config](ecdetseg/configs/ecdet/ecdet_l.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_l.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_l.pth) |
-| **ECDet-L** | O365 | 640 | 59.0 | 33 | 101 | 10.49 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_l_o3652coco.pth) |
-| **ECDet-X** | -- | 640 | 57.9 | 49 | 151 | 12.70 | [config](ecdetseg/configs/ecdet/ecdet_x.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_x.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_x.pth) |
-| **ECDet-X** | O365 | 640 | 59.9 | 49 | 151 | 12.70 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_x_o3652coco.pth) |
+| **ECDet-S** | -- | 640 | 51.7 | 10 | 50 | 5.41 | [config](ecdetseg/configs/ecdet/ecdet_s.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_s.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_s.pth) |
+| **ECDet-S** | O365 | 640 | 53.6 | 10 | 50 | 5.41 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_s_o3652coco.pth) |
+| **ECDet-M** | -- | 640 | 54.3 | 19 | 85 | 7.98 | [config](ecdetseg/configs/ecdet/ecdet_m.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_m.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_m.pth) |
+| **ECDet-M** | O365 | 640 | 56.7 | 19 | 85 | 7.98 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_m_o3652coco.pth) |
+| **ECDet-L** | -- | 640 | 57.0 | 33 | 147 | 10.49 | [config](ecdetseg/configs/ecdet/ecdet_l.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_l.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_l.pth) |
+| **ECDet-L** | O365 | 640 | 59.0 | 33 | 147 | 10.49 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_l_o3652coco.pth) |
+| **ECDet-X** | -- | 640 | 57.9 | 49 | 204 | 12.70 | [config](ecdetseg/configs/ecdet/ecdet_x.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecdet_x.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecdet_x.pth) |
+| **ECDet-X** | O365 | 640 | 59.9 | 49 | 204 | 12.70 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecdet_x_o3652coco.pth) |
 
 ### Objects365 预训练权重
 
@@ -97,27 +98,27 @@ Task-Specialized Distillation</h1>
 
 | Model | Extra Sup. | Size | AP<sub>50:95</sub> | #Params | GFLOPs | Latency (ms) | Config | Log | Checkpoint |
 |:-----:|:----------:|:----:|:------------------:|:-------:|:------:|:------------:|:------:|:---:|:----------:|
-| **ECSeg-S** | -- | 640 | 43.0 | 10 | 33 | 6.96 | [config](ecdetseg/configs/ecseg/ecseg_s.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_s.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_s.pth) |
-| **ECSeg-S** | O365 | 640 | 43.9 | 10 | 33 | 6.96 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_s_o3652coco.pth) |
-| **ECSeg-M** | -- | 640 | 45.2 | 20 | 64 | 9.85 | [config](ecdetseg/configs/ecseg/ecseg_m.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_m.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_m.pth) |
-| **ECSeg-M** | O365 | 640 | 46.9 | 20 | 64 | 9.85 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_m_o3652coco.pth) |
-| **ECSeg-L** | -- | 640 | 47.1 | 34 | 111 | 12.56 | [config](ecdetseg/configs/ecseg/ecseg_l.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_l.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_l.pth) |
-| **ECSeg-L** | O365 | 640 | 48.8 | 34 | 111 | 12.56 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_l_o3652coco.pth) |
-| **ECSeg-X** | -- | 640 | 48.4 | 50 | 168 | 14.96 | [config](ecdetseg/configs/ecseg/ecseg_x.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_x.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_x.pth) |
-| **ECSeg-X** | O365 | 640 | 49.8 | 50 | 168 | 14.96 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_x_o3652coco.pth) |
+| **ECSeg-S** | -- | 640 | 43.0 | 10 | 57 | 6.96 | [config](ecdetseg/configs/ecseg/ecseg_s.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_s.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_s.pth) |
+| **ECSeg-S** | O365 | 640 | 43.9 | 10 | 57 | 6.96 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_s_o3652coco.pth) |
+| **ECSeg-M** | -- | 640 | 45.2 | 20 | 96 | 9.85 | [config](ecdetseg/configs/ecseg/ecseg_m.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_m.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_m.pth) |
+| **ECSeg-M** | O365 | 640 | 46.9 | 20 | 96 | 9.85 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_m_o3652coco.pth) |
+| **ECSeg-L** | -- | 640 | 47.1 | 34 | 158 | 12.56 | [config](ecdetseg/configs/ecseg/ecseg_l.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_l.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_l.pth) |
+| **ECSeg-L** | O365 | 640 | 48.8 | 34 | 158 | 12.56 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_l_o3652coco.pth) |
+| **ECSeg-X** | -- | 640 | 48.4 | 50 | 216 | 14.96 | [config](ecdetseg/configs/ecseg/ecseg_x.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecseg_x.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecseg_x.pth) |
+| **ECSeg-X** | O365 | 640 | 49.8 | 50 | 216 | 14.96 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecseg_x_o3652coco.pth) |
 
 ### Pose Estimation
 
 | Model | Extra Sup. | Size | AP<sub>50:95</sub> | #Params | GFLOPs | Latency (ms) | Config | Log | Checkpoint |
 |:-----:|:----------:|:----:|:------------------:|:-------:|:------:|:------------:|:------:|:---:|:----------:|
-| **ECPose-S** | -- | 640 | 68.9 | 10 | 30 | 5.54 | [config](ecpose/configs/ecpose/ecpose_s_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_s.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_s.pth) |
-| **ECPose-S** | O365 | 640 | 69.7 | 10 | 30 | 5.54 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_s_o3652coco.pth) |
-| **ECPose-M** | -- | 640 | 72.4 | 20 | 63 | 9.25 | [config](ecpose/configs/ecpose/ecpose_m_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_m.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_m.pth) |
-| **ECPose-M** | O365 | 640 | 73.1 | 20 | 63 | 9.25 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_m_o3652coco.pth) |
-| **ECPose-L** | -- | 640 | 73.5 | 34 | 112 | 11.83 | [config](ecpose/configs/ecpose/ecpose_l_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_l.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_l.pth) |
-| **ECPose-L** | O365 | 640 | 74.5 | 34 | 112 | 11.83 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_l_o3652coco.pth) |
-| **ECPose-X** | -- | 640 | 74.8 | 51 | 172 | 14.31 | [config](ecpose/configs/ecpose/ecpose_x_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_x.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_x.pth) |
-| **ECPose-X** | O365 | 640 | 75.9 | 51 | 172 | 14.31 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_x_o3652coco.pth) |
+| **ECPose-S** | -- | 640 | 68.9 | 10 | 53 | 5.54 | [config](ecpose/configs/ecpose/ecpose_s_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_s.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_s.pth) |
+| **ECPose-S** | O365 | 640 | 69.7 | 10 | 53 | 5.54 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_s_o3652coco.pth) |
+| **ECPose-M** | -- | 640 | 72.4 | 20 | 92 | 9.25 | [config](ecpose/configs/ecpose/ecpose_m_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_m.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_m.pth) |
+| **ECPose-M** | O365 | 640 | 73.1 | 20 | 92 | 9.25 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_m_o3652coco.pth) |
+| **ECPose-L** | -- | 640 | 73.5 | 34 | 157 | 11.83 | [config](ecpose/configs/ecpose/ecpose_l_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_l.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_l.pth) |
+| **ECPose-L** | O365 | 640 | 74.5 | 34 | 157 | 11.83 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_l_o3652coco.pth) |
+| **ECPose-X** | -- | 640 | 74.8 | 51 | 217 | 14.31 | [config](ecpose/configs/ecpose/ecpose_x_coco.yml) | [log](https://github.com/capsule2077/edgecrafter/raw/refs/heads/main/logs/ecpose_x.log) | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1/ecpose_x.pth) |
+| **ECPose-X** | O365 | 640 | 75.9 | 51 | 217 | 14.31 | - | - | [model](https://github.com/capsule2077/edgecrafter/releases/download/edgecrafterv1_o365/ecpose_x_o3652coco.pth) |
 ---
 
 ## 📦 安装
