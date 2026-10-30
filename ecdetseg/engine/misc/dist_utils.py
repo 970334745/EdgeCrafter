@@ -9,6 +9,7 @@ Copyright(c) 2023 lyuwenyu. All Rights Reserved.
 import atexit
 import os
 import random
+import tempfile
 import time
 
 import numpy as np
@@ -138,8 +139,29 @@ def is_main_process():
 
 
 def save_on_master(*args, **kwargs):
-    if is_main_process():
+    if not is_main_process():
+        return
+
+    destination = args[1] if len(args) > 1 else kwargs.get('f')
+    if not isinstance(destination, (str, os.PathLike)):
         torch.save(*args, **kwargs)
+        return
+
+    # Write beside the destination so replacement stays on the same filesystem.
+    directory = os.path.dirname(os.path.abspath(destination))
+    descriptor, temporary = tempfile.mkstemp(dir=directory, prefix='.checkpoint-', suffix='.tmp')
+    os.close(descriptor)
+    try:
+        if len(args) > 1:
+            torch.save(args[0], temporary, *args[2:], **kwargs)
+        else:
+            torch.save(*args, **{**kwargs, 'f': temporary})
+        os.replace(temporary, destination)
+    finally:
+        try:
+            os.remove(temporary)
+        except FileNotFoundError:
+            pass
 
 
 
