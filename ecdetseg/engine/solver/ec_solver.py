@@ -50,7 +50,7 @@ class ECSolver(BaseSolver):
         else:
             self.self_lr_scheduler = False
 
-        top1 = 0
+        top1 = float('-inf')
         best_stat = {'epoch': -1, }
         # evaluate again before resume training
         if self.last_epoch > 0:
@@ -108,7 +108,7 @@ class ECSolver(BaseSolver):
 
             self.last_epoch += 1
 
-            if self.output_dir and epoch < stop_aug_epoch:
+            if self.output_dir:
                 checkpoint_paths = [self.output_dir / 'last.pth']
                 # extra checkpoint before LR drop and every 100 epochs
                 if (epoch + 1) % args.checkpoint_freq == 0:
