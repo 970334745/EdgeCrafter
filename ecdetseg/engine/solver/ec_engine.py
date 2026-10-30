@@ -8,7 +8,6 @@ Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
 
 
 import math
-import sys
 from typing import Iterable
 
 import torch
@@ -18,6 +17,17 @@ from torch.utils.tensorboard import SummaryWriter
 from ..data import CocoEvaluator
 from ..misc import MetricLogger, SmoothedValue, dist_utils
 from ..optim import ModelEMA
+
+
+def _reduce_and_check_losses(loss_dict):
+    # Reduce before backward so every rank rejects a non-finite training step.
+    loss_dict_reduced = dist_utils.reduce_dict(loss_dict)
+    loss_value = sum(loss_dict_reduced.values())
+    if not math.isfinite(loss_value.detach()):
+        raise FloatingPointError(
+            f"Non-finite loss before backward or optimizer update: {loss_dict_reduced}"
+        )
+    return loss_dict_reduced, loss_value
 
 
 def train_one_epoch(self_lr_scheduler, lr_scheduler, model: torch.nn.Module, criterion: torch.nn.Module,
@@ -64,6 +74,7 @@ def train_one_epoch(self_lr_scheduler, lr_scheduler, model: torch.nn.Module, cri
                 loss_dict = criterion(outputs, targets, **metas)
 
             loss = sum(loss_dict.values())
+            loss_dict_reduced, loss_value = _reduce_and_check_losses(loss_dict)
             scaler.scale(loss).backward()
 
             if max_norm > 0:
@@ -79,6 +90,7 @@ def train_one_epoch(self_lr_scheduler, lr_scheduler, model: torch.nn.Module, cri
             loss_dict = criterion(outputs, targets, **metas)
 
             loss : torch.Tensor = sum(loss_dict.values())
+            loss_dict_reduced, loss_value = _reduce_and_check_losses(loss_dict)
             optimizer.zero_grad()
             loss.backward()
 
@@ -96,14 +108,6 @@ def train_one_epoch(self_lr_scheduler, lr_scheduler, model: torch.nn.Module, cri
         else:
             if lr_warmup_scheduler is not None:
                 lr_warmup_scheduler.step()
-
-        loss_dict_reduced = dist_utils.reduce_dict(loss_dict)
-        loss_value = sum(loss_dict_reduced.values())
-
-        if not math.isfinite(loss_value):
-            print("Loss is {}, stopping training".format(loss_value))
-            print(loss_dict_reduced)
-            sys.exit(1)
 
         metric_logger.update(loss=loss_value, **loss_dict_reduced)
         metric_logger.update(lr=optimizer.param_groups[0]["lr"])
